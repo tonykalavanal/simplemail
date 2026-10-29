@@ -1,0 +1,19 @@
+# Local environment: the app plus Mailpit (fake SMTP server with a web inbox).
+# Run with:  docker compose up --build
+services:
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "8025:8025"        # web inbox: http://localhost:8025
+      # SMTP port 1025 is only used inside the compose network, so it isn't published
+
+  app:
+    build: .
+    image: simplemail:dev
+    ports:
+      - "8080:8080"        # the email form: http://localhost:8080
+    environment:
+      SMTP_HOST: mailpit   # the service name works as a hostname inside the compose network
+      SMTP_PORT: "1025"
+    depends_on:
+      - mailpit

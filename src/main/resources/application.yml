@@ -1,0 +1,32 @@
+# All environment-specific values come from environment variables,
+# so the same jar / Docker image runs locally, in Docker Compose and in Kubernetes.
+server:
+  port: 8080
+
+spring:
+  application:
+    name: simplemail
+  mail:
+    host: ${SMTP_HOST:localhost}      # Mailpit locally
+    port: ${SMTP_PORT:1025}           # Mailpit's SMTP port; 587 for real providers
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail.smtp.auth: ${SMTP_AUTH:false}
+      mail.smtp.starttls.enable: ${SMTP_STARTTLS:false}
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true                 # /actuator/health/liveness and /readiness for Kubernetes
+  health:
+    mail:
+      enabled: false                  # don't mark the app unhealthy just because SMTP is briefly down

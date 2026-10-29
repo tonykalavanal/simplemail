@@ -8,3 +8,8 @@ terraform/.terraform/
 terraform/*.tfstate*
 terraform/.terraform.lock.hcl
 *.log
+
+# transfer archives and downloads
+*.tgz
+*.zip
+LICENSE.txt
