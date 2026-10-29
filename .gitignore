@@ -6,7 +6,6 @@ target/
 .DS_Store
 terraform/.terraform/
 terraform/*.tfstate*
-terraform/.terraform.lock.hcl
 *.log
 
 # transfer archives and downloads

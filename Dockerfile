@@ -15,10 +15,11 @@ RUN mvn -B -q package -DskipTests
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-# Run as a non-root user (security best practice)
-RUN groupadd --system app && useradd --system --gid app app
+# Run as a non-root user (security best practice).
+# A numeric UID lets Kubernetes verify the user is not root (runAsNonRoot needs a number, not a name).
+RUN groupadd --system --gid 10001 app && useradd --system --uid 10001 --gid app app
 COPY --from=build /app/target/simplemail.jar /app/simplemail.jar
-USER app
+USER 10001:10001
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/simplemail.jar"]

@@ -1,0 +1,11 @@
+# Non-secret settings, injected into the app as environment variables
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simplemail-config
+  namespace: simplemail
+data:
+  SMTP_HOST: mailpit          # the Mailpit Service name; Kubernetes DNS resolves it
+  SMTP_PORT: "1025"
+  SMTP_AUTH: "false"
+  SMTP_STARTTLS: "false"

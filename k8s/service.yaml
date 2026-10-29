@@ -1,0 +1,12 @@
+# A stable name and port in front of the app pods. Pods come and go; the Service stays.
+apiVersion: v1
+kind: Service
+metadata:
+  name: simplemail
+  namespace: simplemail
+spec:
+  selector:
+    app: simplemail
+  ports:
+    - port: 80
+      targetPort: 8080

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simplemail
+  namespace: simplemail
+  labels:
+    app: simplemail
+spec:
+  replicas: 2                         # two pods, so one can restart without downtime
+  selector:
+    matchLabels:
+      app: simplemail
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0               # never drop below 2 ready pods during a rollout
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: simplemail
+    spec:
+      securityContext:
+        runAsNonRoot: true            # refuse to start if the container would run as root
+        runAsUser: 10001              # numeric UID of the "app" user created in the Dockerfile
+        runAsGroup: 10001
+      containers:
+        - name: simplemail
+          image: simplemail:dev       # loaded into kind with: kind load docker-image
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: simplemail-config
+            - secretRef:
+                name: simplemail-smtp
+          resources:
+            requests:                 # what the scheduler reserves for the pod
+              cpu: 100m
+              memory: 256Mi
+            limits:                   # the most the pod may use; going over memory = OOMKilled
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:             # only send traffic when the app is ready
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:              # restart the container if it stops responding
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
