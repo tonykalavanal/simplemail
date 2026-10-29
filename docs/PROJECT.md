@@ -137,8 +137,8 @@ simplemail/
 
 One phase at a time; tick each off when it works on your Mac. Phases 1–5 are the must-haves for Friday.
 
-- [ ] **1. App:** Spring Boot service, email form, REST endpoint, validation, Mailpit locally
-- [ ] **2. Tests:** JUnit 5 + Mockito for the service and controller; `mvn verify` green
+- [x] **1. App:** Spring Boot service, email form, REST endpoint, validation, Mailpit locally — done Oct 29
+- [x] **2. Tests:** JUnit 5 + Mockito for the service and controller; `mvn verify` green — done Oct 29
 - [ ] **3. Docker:** multi-stage Dockerfile, non-root user; Docker Compose with Mailpit
 - [ ] **4. Kubernetes:** kind cluster; Deployment, Service, ConfigMap, Secret, probes; Mailpit in the cluster
 - [ ] **5. CI/CD:** GitHub Actions build → test → scan → image → push → deploy to kind → smoke test
