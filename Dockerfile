@@ -13,6 +13,8 @@ RUN mvn -B -q package -DskipTests
 
 # ---------- Stage 2: small runtime image with only the JRE and the jar ----------
 FROM eclipse-temurin:21-jre
+# Links the image in GitHub Container Registry to this repo, so the CI token may push to it.
+LABEL org.opencontainers.image.source="https://github.com/tonykalavanal/simplemail"
 WORKDIR /app
 
 # Run as a non-root user (security best practice).
